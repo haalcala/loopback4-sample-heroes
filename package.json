@@ -52,11 +52,14 @@
     "@loopback/rest": "^1.16.0",
     "@loopback/rest-explorer": "^1.2.2",
     "@loopback/service-proxy": "^1.2.2",
+    "dotenv": "^8.0.0",
     "jsonwebtoken": "^8.5.1",
+    "loopback-connector-mongodb": "^4.2.0",
     "oasgraph": "^0.14.1",
     "oasgraph-cli": "^0.4.1",
     "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "shortid": "^2.2.14"
   },
   "devDependencies": {
     "@loopback/build": "^2.0.0",
@@ -65,6 +68,7 @@
     "@types/node": "^10.14.8",
     "@types/passport": "^1.0.0",
     "@types/passport-jwt": "^3.0.1",
+    "@types/shortid": "^0.0.29",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "eslint": "^5.16.0",
