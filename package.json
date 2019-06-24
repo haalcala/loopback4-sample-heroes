@@ -43,6 +43,7 @@
     "!*/__tests__"
   ],
   "dependencies": {
+    "@loopback/authentication": "^2.1.4",
     "@loopback/boot": "^1.4.1",
     "@loopback/context": "^1.19.1",
     "@loopback/core": "^1.8.2",
@@ -51,14 +52,19 @@
     "@loopback/rest": "^1.16.0",
     "@loopback/rest-explorer": "^1.2.2",
     "@loopback/service-proxy": "^1.2.2",
+    "jsonwebtoken": "^8.5.1",
     "oasgraph": "^0.14.1",
-    "oasgraph-cli": "^0.4.1"
+    "oasgraph-cli": "^0.4.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
     "@loopback/build": "^2.0.0",
     "@loopback/eslint-config": "^1.1.2",
     "@loopback/testlab": "^1.6.0",
     "@types/node": "^10.14.8",
+    "@types/passport": "^1.0.0",
+    "@types/passport-jwt": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "eslint": "^5.16.0",
