@@ -1,6 +1,7 @@
 import { Request, RestBindings, get, ResponseObject } from "@loopback/rest";
 import { inject } from "@loopback/context";
 import { SecuredType, secured } from "../auth";
+import { decode } from "jsonwebtoken";
 
 /**
  * OpenAPI response for ping()
@@ -54,7 +55,13 @@ export class PingController {
 
 	@get("/ping/is-authenticated")
 	@secured(SecuredType.IS_AUTHENTICATED)
-	testIsAuthenticated() {
+	async testIsAuthenticated() {
+		console.log(this);
+
+		const tok = decode(this.req.query.access_token);
+
+		console.log("tok", tok);
+
 		return { message: "isAuthenticated: OK" };
 	}
 

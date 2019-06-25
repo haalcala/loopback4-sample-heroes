@@ -5,11 +5,11 @@ import { Role } from "./role.model";
 @model({ settings: {} })
 export class UserRole extends Entity {
 	@property({
-		type: "number",
+		type: "string",
 		id: true,
 		required: true
 	})
-	id: number;
+	id: string;
 
 	@belongsTo(() => User)
 	userId: string;

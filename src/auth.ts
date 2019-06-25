@@ -7,6 +7,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { HttpErrors, Request } from "@loopback/rest";
 import { UserRepository } from "./repositories/user.repository";
 import { UserRoleRepository } from "./repositories/user-role.repository";
+import { decode } from "jsonwebtoken";
 
 // the decorator function, every required param has its own default
 // so we can supply empty param when calling this decorartor.
@@ -79,16 +80,23 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
 	) {}
 
 	value(): ValueOrPromise<Strategy | undefined> {
-		console.log("auth.ts:: MyAuthStrategyProvider.value: this.metadata:", this.metadata);
+		// console.log("auth.ts:: MyAuthStrategyProvider.value: this.metadata:", this.metadata);
+
+		// console.log("this", this);
 
 		if (!this.metadata) return;
 
 		const { strategy } = this.metadata;
+
+		// console.log("ExtractJwt.fromHeader('x-token')", ExtractJwt.fromHeader("x-token").toString());
+
 		if (strategy === "jwt") {
 			return new JwtStrategy(
 				{
 					secretOrKey: JWT_SECRET,
-					jwtFromRequest: ExtractJwt.fromUrlQueryParameter("access_token")
+					// jwtFromRequest: ExtractJwt.fromUrlQueryParameter("access_token")
+					jwtFromRequest: ExtractJwt.fromHeader("x-token")
+					// jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 				},
 				(payload, done) => this.verifyToken(payload, done)
 			);
@@ -99,14 +107,19 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
 	// Then search user from database with id equals to payload's username.
 	// if user is found, then verify its roles
 	async verifyToken(payload: Credentials, done: (err: Error | null, user?: UserProfile | false, info?: Object) => void) {
-		console.log("auth.ts:: verifyToken:");
+		// console.log("auth.ts:: verifyToken: payload:", payload);
 
 		try {
 			const { username } = payload;
 			const user = await this.userRepository.findById(username);
+
+			// console.log("auth.ts:: verifyToken: user:", user);
+
 			if (!user) done(null, false);
 
 			await this.verifyRoles(username);
+
+			// console.log("auth.ts:: verified");
 
 			done(null, { name: username, email: user.email, id: username });
 		} catch (err) {
@@ -120,6 +133,8 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
 		console.log("auth.ts:: verifyRoles: this.metadata:", this.metadata);
 
 		const { type, roles } = this.metadata;
+
+		console.log("auth.ts:: verifyRoles: 11111 SecuredType", SecuredType, [SecuredType.IS_AUTHENTICATED, SecuredType.PERMIT_ALL].includes(type));
 
 		if ([SecuredType.IS_AUTHENTICATED, SecuredType.PERMIT_ALL].includes(type)) return;
 
@@ -158,13 +173,13 @@ export class MyAuthActionProvider implements Provider<AuthenticateFn> {
 
 	value(): AuthenticateFn {
 		return request => {
-			console.log("MyAuthActionProvider:: value: request:", request);
+			// console.log("MyAuthActionProvider:: value: request:", request);
 			return this.action(request);
 		};
 	}
 
 	async action(request: Request): Promise<UserProfile | undefined> {
-		console.log("MyAuthActionProvider:: action: request:", request);
+		// console.log("MyAuthActionProvider:: action: request:", request);
 
 		const metadata = await this.getMetadata();
 		if (metadata && metadata.type === SecuredType.PERMIT_ALL) return;

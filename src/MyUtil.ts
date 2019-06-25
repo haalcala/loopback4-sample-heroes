@@ -2,7 +2,7 @@ import crypto = require("crypto");
 
 class MyUtil {
 	async getEmailToken(email: string): Promise<string> {
-		return this.getSha256(email);
+		return this.getSha256(process.env.REGISTER_SECRET + "." + email);
 	}
 
 	getSha256(string: string, key?: string): string {
