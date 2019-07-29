@@ -12,6 +12,7 @@ import shortid = require("shortid");
 import { UserRole } from "../models/user-role.model";
 import { inject } from "@loopback/core";
 import { decode } from "jsonwebtoken";
+import { LoginInput } from "../models";
 
 const { sign } = require("jsonwebtoken");
 const signAsync = promisify(sign);
@@ -24,8 +25,50 @@ export class UserController {
 		@repository(ActivationRepository) private activationRepository: ActivationRepository
 	) {}
 
-	@post("/users/login")
-	async login(@requestBody() credentials: Credentials) {
+	@post("/users/login", {
+		requestBody: {
+			content: {
+				"application/json": {
+					schema: {
+						type: "object",
+						properties: {
+							username: {
+								type: "string"
+							},
+							password: {
+								type: "string"
+							}
+						},
+						schema: { "x-ts-type": LoginInput }
+					}
+				}
+			}
+		},
+		responses: {
+			"200": {
+				description: "Login",
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								token: {
+									type: "string"
+								},
+								id: {
+									type: "string"
+								},
+								email: {
+									type: "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	})
+	async login(@requestBody() credentials: LoginInput) {
 		console.log("UserController.login:: credentials:", credentials);
 
 		const { username, password } = credentials;
@@ -87,6 +130,10 @@ export class UserController {
 
 	@post("/users/confirmRegistration")
 	async confirmRegistration(@requestBody() { email, token, password }: { email: string; token: string; password: string }) {
+		if (!password) {
+			throw new HttpErrors.BadRequest("Missing required input email/password");
+		}
+
 		const act = await this.activationRepository.findOne({ where: { email, token } });
 
 		console.log("UserController.confirmRegistration:: act:", act);
@@ -120,7 +167,25 @@ export class UserController {
 		};
 	}
 
-	@get("/users/account")
+	@get("/users/account", {
+		responses: {
+			"200": {
+				description: "Account",
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								email: {
+									type: "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	})
 	@secured(SecuredType.IS_AUTHENTICATED)
 	async account() {
 		console.log(this.req.query);

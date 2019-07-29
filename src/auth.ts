@@ -61,7 +61,7 @@ export class MyAuthMetadataProvider extends AuthMetadataProvider {
 export const JWT_SECRET = "changeme";
 
 // the required interface to filter login payload
-export interface Credentials {
+export class Credentials {
 	username: string;
 	password: string;
 }
