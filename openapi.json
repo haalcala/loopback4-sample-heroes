@@ -1,0 +1,1295 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LoopBack Application",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/heroes/count": {
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "count",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Hero model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "HeroController.count"
+      }
+    },
+    "/heroes/{id}/friend": {
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "getFriend",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Character model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hero"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "HeroController.getFriend"
+      }
+    },
+    "/heroes/{id}/planet": {
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "getPlanet",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Character model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "HeroController.getPlanet"
+      }
+    },
+    "/heroes/{id}/species": {
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "getSpecies",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Character model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Species"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "HeroController.getSpecies"
+      }
+    },
+    "/heroes/{id}": {
+      "put": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "replaceById",
+        "tags": ["HeroController"],
+        "responses": {
+          "204": {
+            "description": "Hero PUT success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hero"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "HeroController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "updateById",
+        "tags": ["HeroController"],
+        "responses": {
+          "204": {
+            "description": "Hero PATCH success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hero"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "HeroController.updateById"
+      },
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "findById",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Hero model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hero"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "HeroController.findById"
+      },
+      "delete": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "deleteById",
+        "tags": ["HeroController"],
+        "responses": {
+          "204": {
+            "description": "Hero DELETE success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "HeroController.deleteById"
+      }
+    },
+    "/heroes": {
+      "post": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "create",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Hero model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hero"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hero"
+              }
+            }
+          }
+        },
+        "operationId": "HeroController.create"
+      },
+      "patch": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "updateAll",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Hero PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hero"
+              }
+            }
+          }
+        },
+        "operationId": "HeroController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "HeroController",
+        "x-operation-name": "find",
+        "tags": ["HeroController"],
+        "responses": {
+          "200": {
+            "description": "Array of Hero model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Hero"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "properties": {
+                "where": {
+                  "type": "object"
+                },
+                "fields": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "boolean"
+                    },
+                    "friendId": {
+                      "type": "boolean"
+                    },
+                    "planetId": {
+                      "type": "boolean"
+                    },
+                    "speciesId": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "skip": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "order": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "include": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "relation": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "properties": {
+                          "where": {
+                            "type": "object"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "offset": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "limit": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "skip": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "order": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "HeroController.find"
+      }
+    },
+    "/ping/deny-all": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "testDenyAll",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Return value of PingController.testDenyAll"
+          }
+        },
+        "operationId": "PingController.testDenyAll"
+      }
+    },
+    "/ping/has-any-role": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "testHasAnyRole",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Return value of PingController.testHasAnyRole"
+          }
+        },
+        "operationId": "PingController.testHasAnyRole"
+      }
+    },
+    "/ping/has-roles": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "testHasRoles",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Return value of PingController.testHasRoles"
+          }
+        },
+        "operationId": "PingController.testHasRoles"
+      }
+    },
+    "/ping/is-authenticated": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "testIsAuthenticated",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Return value of PingController.testIsAuthenticated"
+          }
+        },
+        "operationId": "PingController.testIsAuthenticated"
+      }
+    },
+    "/ping/permit-all": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "testPermitAll",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Return value of PingController.testPermitAll"
+          }
+        },
+        "operationId": "PingController.testPermitAll"
+      }
+    },
+    "/ping": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "ping",
+        "tags": ["PingController"],
+        "responses": {
+          "200": {
+            "description": "Ping Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "greeting": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "PingController.ping"
+      }
+    },
+    "/planets/count": {
+      "get": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "count",
+        "tags": ["PlanetController"],
+        "responses": {
+          "200": {
+            "description": "Planet model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "PlanetController.count"
+      }
+    },
+    "/planets/{id}": {
+      "put": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "replaceById",
+        "tags": ["PlanetController"],
+        "responses": {
+          "204": {
+            "description": "Planet PUT success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Planet"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "PlanetController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "updateById",
+        "tags": ["PlanetController"],
+        "responses": {
+          "204": {
+            "description": "Planet PATCH success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Planet"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "PlanetController.updateById"
+      },
+      "get": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "findById",
+        "tags": ["PlanetController"],
+        "responses": {
+          "200": {
+            "description": "Planet model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PlanetController.findById"
+      },
+      "delete": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "deleteById",
+        "tags": ["PlanetController"],
+        "responses": {
+          "204": {
+            "description": "Planet DELETE success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PlanetController.deleteById"
+      }
+    },
+    "/planets": {
+      "post": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "create",
+        "tags": ["PlanetController"],
+        "responses": {
+          "200": {
+            "description": "Planet model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Planet"
+              }
+            }
+          }
+        },
+        "operationId": "PlanetController.create"
+      },
+      "patch": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "updateAll",
+        "tags": ["PlanetController"],
+        "responses": {
+          "200": {
+            "description": "Planet PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Planet"
+              }
+            }
+          }
+        },
+        "operationId": "PlanetController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "PlanetController",
+        "x-operation-name": "find",
+        "tags": ["PlanetController"],
+        "responses": {
+          "200": {
+            "description": "Array of Planet model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Planet"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "properties": {
+                "where": {
+                  "type": "object"
+                },
+                "fields": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "skip": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "order": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "PlanetController.find"
+      }
+    },
+    "/species/count": {
+      "get": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "count",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "200": {
+            "description": "Species model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "SpeciesController.count"
+      }
+    },
+    "/species/{id}": {
+      "put": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "replaceById",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "204": {
+            "description": "Species PUT success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Species"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "SpeciesController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "updateById",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "204": {
+            "description": "Species PATCH success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Species"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "SpeciesController.updateById"
+      },
+      "get": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "findById",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "200": {
+            "description": "Species model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Species"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "SpeciesController.findById"
+      },
+      "delete": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "deleteById",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "204": {
+            "description": "Species DELETE success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "SpeciesController.deleteById"
+      }
+    },
+    "/species": {
+      "post": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "create",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "200": {
+            "description": "Species model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Species"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Species"
+              }
+            }
+          }
+        },
+        "operationId": "SpeciesController.create"
+      },
+      "patch": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "updateAll",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "200": {
+            "description": "Species PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Species"
+              }
+            }
+          }
+        },
+        "operationId": "SpeciesController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "SpeciesController",
+        "x-operation-name": "find",
+        "tags": ["SpeciesController"],
+        "responses": {
+          "200": {
+            "description": "Array of Species model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Species"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "properties": {
+                "where": {
+                  "type": "object"
+                },
+                "fields": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "boolean"
+                    },
+                    "lifespan": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "skip": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "order": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "operationId": "SpeciesController.find"
+      }
+    },
+    "/users/account": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "account",
+        "tags": ["UserController"],
+        "responses": {
+          "200": {
+            "description": "Account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "UserController.account"
+      }
+    },
+    "/users/confirmRegistration": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "confirmRegistration",
+        "tags": ["UserController"],
+        "responses": {
+          "200": {
+            "description": "Return value of UserController.confirmRegistration"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.confirmRegistration"
+      }
+    },
+    "/users/login": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "login",
+        "tags": ["UserController"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "UserController.login"
+      }
+    },
+    "/users/register": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "register",
+        "tags": ["UserController"],
+        "responses": {
+          "200": {
+            "description": "Return value of UserController.register"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.register"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3998"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Hero": {
+        "title": "Hero",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "friendId": {
+            "type": "string"
+          },
+          "planetId": {
+            "type": "string"
+          },
+          "speciesId": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "Planet": {
+        "title": "Planet",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "Species": {
+        "title": "Species",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lifespan": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "LoginInput": {
+        "title": "LoginInput",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": ["password", "username"]
+      }
+    }
+  }
+}

@@ -1,4 +1,11 @@
-import { post, requestBody, HttpErrors, get, RestBindings, Request } from "@loopback/rest";
+import {
+  post,
+  requestBody,
+  HttpErrors,
+  get,
+  RestBindings,
+  Request
+} from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { Credentials, JWT_SECRET, secured, SecuredType } from "../auth";
 import { promisify } from "util";
@@ -18,201 +25,224 @@ const { sign } = require("jsonwebtoken");
 const signAsync = promisify(sign);
 
 export class UserController {
-	constructor(
-		@inject(RestBindings.Http.REQUEST) private req: Request,
-		@repository(UserRepository) private userRepository: UserRepository,
-		@repository(UserRoleRepository) private userRoleRepository: UserRoleRepository,
-		@repository(ActivationRepository) private activationRepository: ActivationRepository
-	) {}
+  constructor(
+    @inject(RestBindings.Http.REQUEST) private req: Request,
+    @repository(UserRepository) private userRepository: UserRepository,
+    @repository(UserRoleRepository)
+    private userRoleRepository: UserRoleRepository,
+    @repository(ActivationRepository)
+    private activationRepository: ActivationRepository
+  ) {}
 
-	@post("/users/login", {
-		requestBody: {
-			content: {
-				"application/json": {
-					schema: {
-						type: "object",
-						properties: {
-							username: {
-								type: "string"
-							},
-							password: {
-								type: "string"
-							}
-						},
-						schema: { "x-ts-type": LoginInput }
-					}
-				}
-			}
-		},
-		responses: {
-			"200": {
-				description: "Login",
-				content: {
-					"application/json": {
-						schema: {
-							type: "object",
-							properties: {
-								token: {
-									type: "string"
-								},
-								id: {
-									type: "string"
-								},
-								email: {
-									type: "string"
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	})
-	async login(@requestBody() credentials: LoginInput) {
-		console.log("UserController.login:: credentials:", credentials);
+  @post("/users/login", {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              username: {
+                type: "string"
+              },
+              password: {
+                type: "string"
+              }
+            },
+            schema: { "x-ts-type": LoginInput }
+          }
+        }
+      }
+    },
+    responses: {
+      "200": {
+        description: "Login",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                token: {
+                  type: "string"
+                },
+                id: {
+                  type: "string"
+                },
+                email: {
+                  type: "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  async login(@requestBody() loginInput: LoginInput) {
+    console.log("UserController.login:: credentials:", loginInput);
 
-		const { username, password } = credentials;
+    console.log("Hello world!");
 
-		if (!username || !password) {
-			throw new HttpErrors.Unauthorized("Invalid credentials");
-		}
+    const { username, password } = loginInput;
 
-		const user = await this.userRepository.findOne({ where: { email: username } });
-		if (!user) throw new HttpErrors.Unauthorized("Invalid credentials");
+    if (!username || !password) {
+      throw new HttpErrors.Unauthorized("Invalid credentials");
+    }
 
-		const isPasswordMatched = user.password === myUtil.getSha256(user.email + "." + user.salt + "." + password);
-		if (!isPasswordMatched) throw new HttpErrors.Unauthorized("Invalid credentials");
+    const user = await this.userRepository.findOne({
+      where: { email: username }
+    });
 
-		const tokenObject = { username };
-		const token = await signAsync(tokenObject, JWT_SECRET);
-		const roles = await this.userRoleRepository.find({ where: { userId: user.id } });
-		const { id, email } = user;
+    if (!user) throw new HttpErrors.Unauthorized("Invalid credentials");
 
-		return {
-			token,
-			id: id as string,
-			email,
-			roles: roles.map(r => r.roleId)
-		};
-	}
+    const isPasswordMatched =
+      user.password ===
+      myUtil.getSha256(user.email + "." + user.salt + "." + password);
+    if (!isPasswordMatched)
+      throw new HttpErrors.Unauthorized("Invalid credentials");
 
-	@post("/users/register")
-	async register(@requestBody() userInfo: { email: string }) {
-		console.log("UserController.register:: userInfo:", userInfo);
+    const tokenObject = { username };
+    const token = await signAsync(tokenObject, JWT_SECRET);
+    const roles = await this.userRoleRepository.find({
+      where: { userId: user.id }
+    });
+    const { id, email } = user;
 
-		const { email } = userInfo;
+    return {
+      token,
+      id: id as string,
+      email,
+      roles: roles.map(r => r.roleId)
+    };
+  }
 
-		const user = await this.userRepository.findOne({ where: { email } });
+  @post("/users/register")
+  async register(@requestBody() userInfo: { email: string }) {
+    console.log("UserController.register:: userInfo:", userInfo);
 
-		if (user) {
-			throw new HttpErrors.InternalServerError("Email already exists.");
-		}
+    const { email } = userInfo;
 
-		let act = await this.activationRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ where: { email } });
 
-		console.log("UserController.register:: act:", act);
+    if (user) {
+      throw new HttpErrors.InternalServerError("Email already exists.");
+    }
 
-		if (act) {
-			await this.activationRepository.delete(act);
-		}
+    let act = await this.activationRepository.findOne({ where: { email } });
 
-		act = new Activation();
-		act.email = email;
-		act.createdAt = new Date();
-		act.token = await myUtil.getEmailToken(act.email);
+    console.log("UserController.register:: act:", act);
 
-		await this.activationRepository.create(act);
+    if (act) {
+      await this.activationRepository.delete(act);
+    }
 
-		return {
-			ok: 1
-		};
-	}
+    act = new Activation();
+    act.email = email;
+    act.createdAt = new Date();
+    act.token = await myUtil.getEmailToken(act.email);
 
-	@post("/users/confirmRegistration")
-	async confirmRegistration(@requestBody() { email, token, password }: { email: string; token: string; password: string }) {
-		if (!password) {
-			throw new HttpErrors.BadRequest("Missing required input email/password");
-		}
+    await this.activationRepository.create(act);
 
-		const act = await this.activationRepository.findOne({ where: { email, token } });
+    return {
+      ok: 1
+    };
+  }
 
-		console.log("UserController.confirmRegistration:: act:", act);
+  @post("/users/confirmRegistration")
+  async confirmRegistration(@requestBody()
+  {
+    email,
+    token,
+    password
+  }: {
+    email: string;
+    token: string;
+    password: string;
+  }) {
+    if (!password) {
+      throw new HttpErrors.BadRequest("Missing required input email/password");
+    }
 
-		if (!act) {
-			throw new HttpErrors.Unauthorized("Invalid credentials");
-		}
+    const act = await this.activationRepository.findOne({
+      where: { email, token }
+    });
 
-		await this.activationRepository.delete(act);
+    console.log("UserController.confirmRegistration:: act:", act);
 
-		const user = new User();
+    if (!act) {
+      throw new HttpErrors.Unauthorized("Invalid credentials");
+    }
 
-		user.id = user.email = act.email;
-		user.salt = shortid.generate();
-		user.password = myUtil.getSha256(email + "." + user.salt + "." + password);
-		user.createdAt = user.updatedAt = new Date();
+    await this.activationRepository.delete(act);
 
-		await this.userRepository.create(user);
+    const user = new User();
 
-		const userRole = new UserRole();
+    user.id = user.email = act.email;
+    user.salt = shortid.generate();
+    user.password = myUtil.getSha256(email + "." + user.salt + "." + password);
+    user.createdAt = user.updatedAt = new Date();
 
-		userRole.id = shortid.generate();
-		userRole.userId = user.email;
-		userRole.roleId = "ADMIN";
+    await this.userRepository.create(user);
 
-		await this.userRoleRepository.create(userRole);
+    const userRole = new UserRole();
 
-		return {
-			ok: 1,
-			user
-		};
-	}
+    userRole.id = shortid.generate();
+    userRole.userId = user.email;
+    userRole.roleId = "ADMIN";
 
-	@get("/users/account", {
-		responses: {
-			"200": {
-				description: "Account",
-				content: {
-					"application/json": {
-						schema: {
-							type: "object",
-							properties: {
-								email: {
-									type: "string"
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	})
-	@secured(SecuredType.IS_AUTHENTICATED)
-	async account() {
-		console.log(this.req.query);
+    await this.userRoleRepository.create(userRole);
 
-		// const tok = decode(this.req.query.access_token);
-		// @ts-ignore
-		const tok = decode(this.req.headers["x-token"]);
+    return {
+      ok: 1,
+      user
+    };
+  }
 
-		if (!tok) {
-			throw new HttpErrors.Unauthorized("Invalid credentials");
-		}
+  @get("/users/account", {
+    responses: {
+      "200": {
+        description: "Account",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                email: {
+                  type: "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  @secured(SecuredType.IS_AUTHENTICATED)
+  async account() {
+    console.log(this.req.query);
 
-		// @ts-ignore
-		const user = await this.userRepository.findById(tok.username);
+    // const tok = decode(this.req.query.access_token);
+    // @ts-ignore
+    const tok = decode(this.req.headers["x-token"]);
 
-		if (!user) {
-			throw new HttpErrors.Unauthorized("Invalid credentials");
-		}
+    if (!tok) {
+      throw new HttpErrors.Unauthorized("Invalid credentials");
+    }
 
-		return {
-			ok: 1,
-			user: ["email", "createdAt"].reduce((val: object, prop) => {
-				// @ts-ignore
-				val[prop] = user[prop];
+    // @ts-ignore
+    const user = await this.userRepository.findById(tok.username);
 
-				return val;
-			}, {})
-		};
-	}
+    if (!user) {
+      throw new HttpErrors.Unauthorized("Invalid credentials");
+    }
+
+    return {
+      ok: 1,
+      user: ["email", "createdAt"].reduce((val: object, prop) => {
+        // @ts-ignore
+        val[prop] = user[prop];
+
+        return val;
+      }, {})
+    };
+  }
 }
