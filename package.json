@@ -59,7 +59,8 @@
     "oasgraph-cli": "^0.4.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "shortid": "^2.2.14"
+    "shortid": "^2.2.14",
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@loopback/build": "^2.0.0",
@@ -76,8 +77,7 @@
     "eslint-plugin-eslint-plugin": "^2.1.0",
     "eslint-plugin-mocha": "^5.3.0",
     "husky": "^3.0.2",
-    "pretty-quick": "^1.11.1",
-    "typescript": "~3.5.2"
+    "pretty-quick": "^1.11.1"
   },
   "husky": {
     "hooks": {
