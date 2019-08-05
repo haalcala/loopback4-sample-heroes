@@ -26,7 +26,8 @@
     "docker:run": "docker run -p 3000:3000 -d heroes",
     "migrate": "node ./dist/migrate",
     "_prestart": "npm run build",
-    "start": "nodemon --exec ts-node .",
+    "start_dev": "nodemon --exec ts-node .",
+    "start": "ts-node .",
     "prepublishOnly": "npm run test"
   },
   "repository": {
