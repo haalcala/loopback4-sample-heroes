@@ -222,7 +222,14 @@ export class UserController {
 
     // const tok = decode(this.req.query.access_token);
     // @ts-ignore
-    const tok = decode(this.req.headers["x-token"]);
+    // const tok = decode(this.req.headers["x-token"]);
+    const tok = decode(this.req.headers["authorization"].split(" ")[1]);
+
+    console.log(
+      "user.controller.ts::account: this.req.headers:",
+      this.req.headers
+    );
+    console.log("user.controller.ts::account: tok:", tok);
 
     if (!tok) {
       throw new HttpErrors.Unauthorized("Invalid credentials");

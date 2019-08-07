@@ -116,15 +116,22 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
       this.metadata
     );
 
-    // console.log("this", this);
+    // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  this", this);
 
     if (!this.metadata) return;
 
     const { strategy } = this.metadata;
 
+    console.log("MyAuthStrategyProvider:: strategy:", strategy);
+
     console.log(
       "ExtractJwt.fromHeader('x-token')",
       ExtractJwt.fromHeader("x-token").toString()
+    );
+
+    console.log(
+      "ExtractJwt.fromAuthHeaderAsBearerToken():",
+      ExtractJwt.fromAuthHeaderAsBearerToken().toString()
     );
 
     if (strategy === "jwt") {
@@ -132,8 +139,8 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
         {
           secretOrKey: JWT_SECRET,
           // jwtFromRequest: ExtractJwt.fromUrlQueryParameter("access_token")
-          jwtFromRequest: ExtractJwt.fromHeader("x-token")
-          // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+          // jwtFromRequest: ExtractJwt.fromHeader("x-token")
+          jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
         },
         (payload, done) => this.verifyToken(payload, done)
       );
@@ -147,13 +154,13 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
     payload: Credentials,
     done: (err: Error | null, user?: UserProfile | false, info?: Object) => void
   ) {
-    // console.log("auth.ts:: verifyToken: payload:", payload);
+    console.log("auth.ts:: verifyToken: payload:", payload);
 
     try {
       const { username } = payload;
       const user = await this.userRepository.findById(username);
 
-      // console.log("auth.ts:: verifyToken: user:", user);
+      console.log("auth.ts:: verifyToken: user:", user);
 
       if (!user) done(null, false);
 
@@ -173,6 +180,8 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
     console.log("auth.ts:: verifyRoles: this.metadata:", this.metadata);
 
     const { type, roles } = this.metadata;
+
+    console.log("auth.ts:: verifyRoles: 11111 type:", type, "roles:", roles);
 
     console.log(
       "auth.ts:: verifyRoles: 11111 SecuredType",
